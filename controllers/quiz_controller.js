@@ -27,7 +27,7 @@ exports.index = function(req, res) {
       }
     ).catch(function(error) { next(error);})
 
-  }
+  } else {
 
   models.Quiz.findAll().then(
     function(quizes) {
@@ -35,6 +35,9 @@ exports.index = function(req, res) {
       res.render('quizes/index', { quizes: quizes});
     }
   ).catch(function(error) { next(error);})
+
+  }
+
 };
 
 // GET /quizes/:id
