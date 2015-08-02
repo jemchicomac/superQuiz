@@ -21,8 +21,7 @@ exports.index = function(req, res) {
 
     var sQuery = "%".concat(s.replace(" ","%").concat("%"));
 
-    models.Quiz.findAll( { where: ["pregunta like ?", sQuery] } ).then(
-    //models.Quiz.findAll( { where: { pregunta like : '%Italia' } } ).then(
+    models.Quiz.findAll( { where: ["pregunta like ?", sQuery], order: "pregunta" } ).then(
       function(quizes) {
         res.render('quizes/search', { quizes: quizes, search : s});
       }
