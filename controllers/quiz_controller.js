@@ -14,8 +14,25 @@ exports.load = function(req, res, next, quizId) {
 
 // GET /quizes
 exports.index = function(req, res) {
+
+  var s = req.param('search');
+  
+  if (s) {
+
+    var sQuery = "%".concat(s.replace(" ","%").concat("%"));
+
+    models.Quiz.findAll( { where: ["pregunta like ?", sQuery] } ).then(
+    //models.Quiz.findAll( { where: { pregunta like : '%Italia' } } ).then(
+      function(quizes) {
+        res.render('quizes/search', { quizes: quizes, search : s});
+      }
+    ).catch(function(error) { next(error);})
+
+  }
+
   models.Quiz.findAll().then(
     function(quizes) {
+
       res.render('quizes/index', { quizes: quizes});
     }
   ).catch(function(error) { next(error);})

@@ -5,7 +5,7 @@ var quizController = require('../controllers/quiz_controller');
 
 // Página de entrada (home page)
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Quiz' });
+  res.render('index', { title: 'SuperQuiz' });
 });
 
 // Autoload de comandos con :quizId
@@ -15,5 +15,15 @@ router.param('quizId', quizController.load);  // autoload :quizId
 router.get('/quizes',                      quizController.index);
 router.get('/quizes/:quizId(\\d+)',        quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
+
+/* GET Authors. */
+router.get('/author', function(req, res) {
+  res.render('author', { title: 'Acerca de' });
+});
+
+/* GET Search. */
+router.get('/search', function(req, res) {
+  res.render('search', { title: 'Buscar preguntas' });
+});
 
 module.exports = router;
