@@ -5,7 +5,7 @@ var quizController = require('../controllers/quiz_controller');
 
 // Página de entrada (home page)
 router.get('/', function(req, res) {
-  res.render('index', { title: 'SuperQuiz' });
+  res.render('index', { title: 'SuperQuiz', errors: [] });
 });
 
 // Autoload de comandos con :quizId
@@ -21,12 +21,12 @@ router.post('/quizes/create',              quizController.create);
 
 /* GET Authors. */
 router.get('/author', function(req, res) {
-  res.render('author', { title: 'Acerca de' });
+  res.render('author', { title: 'Acerca de' , errors: [] });
 });
 
 /* GET Search. */
 router.get('/search', function(req, res) {
-  res.render('search', { title: 'Buscar preguntas' });
+  res.render('search', { title: 'Buscar preguntas' , errors: [] });
 });
 
 module.exports = router;
