@@ -30,6 +30,7 @@ app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded()); - Siguiendo lo que indica el log y el foro
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Tal como avisa el log, esta invocación está deprecada y por tanto hay que invocar como indica el foro
 //app.use(cookieParser('Quiz 2015'));
 //app.use(session());
 
@@ -53,7 +54,50 @@ app.use(function(req, res, next) {
 
   // Hacer visible req.session en las vistas
   res.locals.session = req.session;
+
+  //res.locals.timeCount = new Date();
+  //debug("Registered Date"+res.locals.timeCount);
+
   next();
+});
+
+// Controlador de tiempo de sesion
+
+app.use(function(req, res, next) {
+
+//console.log ("I'm here, man with user session:" +req.session.user);
+
+if (req.session.user === undefined || req.session.user === null) { 
+  console.log("no active session");
+  next();
+}
+else {
+
+  var lastKnowRequest = new Date(req.session.timeCount);
+  var currentTime = new Date();
+
+  var deltaMinutes = ((currentTime - lastKnowRequest)/1000)/60;
+
+  console.log ("En sesion. Ultima sesion conocida: "+ lastKnowRequest + 
+                "Tiempo actual: "+ currentTime
+                + "Minutos transcurridos"+deltaMinutes);
+
+  if (deltaMinutes>2) { //Sesión expirada
+
+    delete req.session.user;
+    req.session.errors = [{"message": 'La sesión ha caducado tras 2 minutos de inactividad'}];
+    res.redirect("/login");  
+
+  } else { // Reset de contador
+
+      req.session.timeCount = currentTime;
+
+    next();
+  }
+  //console.log ("Tiempo actual: "+ currentTime);
+  
+}
+
 });
 
 app.use('/', routes);

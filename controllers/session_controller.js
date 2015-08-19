@@ -1,3 +1,22 @@
+// MW de control de tiempo
+exports.timeController = function(req,res,next){
+    
+    if (req.session.user) {
+
+        var deltaMinutes = Math.floor (((new Date()- req.session.timeCount)/1000)/60);
+
+        debug ("Nueva petición tras "+deltaMinutes+" minutos!");
+
+        if (deltaMinutes>= 2) {
+            req.session.errors = [{"message": 'Se ha producido un error: sesion caducada'}];
+            res.redirect("/login");
+        } else {
+            req.session.timeCount = new Date();
+            next();
+        }
+    }
+}
+
 // MW de autorización de accesos HTTP restringidos
 exports.loginRequired = function(req, res, next){
     if (req.session.user) {
@@ -33,6 +52,9 @@ exports.create = function(req, res) {
         // Crear req.session.user y guardar campos   id  y  username
         // La sesión se define por la existencia de:    req.session.user
         req.session.user = {id:user.id, username:user.username};
+        req.session.timeCount = new Date();
+
+        console.log ("Login registrado a las:"+req.session.timeCount);
 
         res.redirect(req.session.redir.toString());// redirección a path anterior a login
     });

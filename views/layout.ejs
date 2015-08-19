@@ -17,6 +17,7 @@
 <body>
 <div id="page-wrap">
   <header class="main" id="h1">
+  <% var date= new Date();%><%=date%><p><% if (!session.timeCount) { var text = 'No Session' }%><%- text %>
    <%if(!session.user){%>
       <span class="right"><a href="/login">Login</a></span>
     <%}else{%>
